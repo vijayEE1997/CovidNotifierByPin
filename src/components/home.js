@@ -48,7 +48,11 @@ function Home() {
 
 
     function callNotifier() {
-       
+    //    axios.get("http://localhost:8080/data")
+          axios.get("https://covid-notifier-vj-b.herokuapp.com/data")
+            .then((data)=>{
+                console.log(data)
+            })
     }
 
     function callTimer() {
