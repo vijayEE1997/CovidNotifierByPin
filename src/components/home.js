@@ -5,9 +5,9 @@ function Home() {
 
     const [sentDate, setSentDate] = useState(new Date("2020-12-30"));
     var [today, setToday] = useState(new Date());
-    console.log(sentDate)
-    console.log(today)
-    const pin = "301001";
+    // console.log(sentDate)
+    // console.log(today)
+    const pin = "473001";
 
 
     useEffect(() => {
@@ -26,16 +26,19 @@ function Home() {
                             sessions_all.push(session)
                         })
                     })
-                    sessions_all = sessions_all.filter((session) => { return (session.min_age_limit === 45) && (session.available_capacity > 0) }); //Filter out 18+ age group from 45+
-                    console.log(sessions_all);
+                    sessions_all = sessions_all.filter((session) => { return (session.min_age_limit === 18) && (session.available_capacity > 0) }); //Filter out 18+ age group from 45+
+                    // console.log(sessions_all);
 
                     if (sessions_all.length > 0) {
-                        callNotifier();
-                        setSentDate(date);
+                        console.log("Sessions Found...")
+                        callNotifier()
                         callTimer();
                     }
                     else
-                        callTimer()
+                        {
+                            callTimer()
+                            console.log("No Sessions Found...")
+                        }
                 }).catch((error) => {
                     console.log(error)
                 })
@@ -44,16 +47,17 @@ function Home() {
             callTimer()
         }
 
+        function callNotifier() {
+            // axios.get("http://localhost:8080/notify")
+               axios.get("https://covid-notifier-vj-b.herokuapp.com/notify")
+                 .then((response)=>{
+                     console.log(response.data)
+                     if(response.data === 1)
+                     setSentDate(date)
+                 })
+         }
+
     }, [today])
-
-
-    function callNotifier() {
-    //    axios.get("http://localhost:8080/data")
-          axios.get("https://covid-notifier-vj-b.herokuapp.com/data")
-            .then((data)=>{
-                console.log(data)
-            })
-    }
 
     function callTimer() {
         setTimeout(() => {
